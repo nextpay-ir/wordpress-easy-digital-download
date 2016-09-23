@@ -1,18 +1,19 @@
 <?php
 /**
  * Created by NextPay.ir
- * ID: @FreezeMan
- * Date: 7/29/16
- * Time: 5:22 PM
- * Website: http://www.NextPay.ir
- * Email: freezeman.0098@gmail.com
+ * Created by NextPay.ir
+ * author: Nextpay Company
+ * ID: @nextpay
+ * Date: 09/22/2016
+ * Time: 5:05 PM
+ * Website: NextPay.ir
+ * Email: info@nextpay.ir
  * @copyright 2016
  * @package NextPay_Gateway
  * @version 1.0
  * Plugin Name: Nextpay payment for EDD
  * Plugin URI: http://www.nextpay.ir
  * Description: درگاه پرداخت <a href="http://nextpay.ir">نکست پی</a> را به EDD اضافه میکند
- * Author: @FreezeMan
  * Version: 1.0
  * Author URI: http://www.nextpay.ir
 */
@@ -71,11 +72,13 @@ function np_process($purchase_data) {
         $_SESSION['edd_nextpay_record'] = $payment;
         $callback = add_query_arg('verify', 'nextpay', get_permalink($edd_options['success_page']));
         $amount = intval($payment_data['price']) / 10;
+        $order_id = time();
         $api_key = $edd_options['api_key'];
 
         include_once "nextpay_payment.php";
         $data = array(
             'api_key' => $api_key,
+            'order_id' => $order_id,
             'amount' => $amount,
             'callback_uri' => $callback
         );
@@ -104,6 +107,7 @@ function np_verify() {
     if (isset($_GET['verify']) && $_GET['verify'] == 'nextpay' && isset($_POST['trans_id'])) {
 
         $trans_id = $_POST['trans_id'];
+        $order_id = $_POST['order_id'];
 
 
         $payment_id = $_SESSION['edd_nextpay_record'];
@@ -119,7 +123,7 @@ function np_verify() {
             //$nextpay->setApiKey($Api_key);
             //$nextpay->setTransId($trans_id);
             //$nextpay->setAmount($Amount);
-            $result = $nextpay->verify_request(array("api_key"=>$Api_key,"amount"=>$Amount,"trans_id"=>$trans_id));
+            $result = $nextpay->verify_request(array("api_key"=>$Api_key,"order_id"=>$order_id,"amount"=>$Amount,"trans_id"=>$trans_id));
             edd_empty_cart();
             if(intval($result) == 0) {
                 //update_post_meta( $payment, '_edd_payment_ppalrefnum',$Refnumber);
