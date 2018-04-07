@@ -72,7 +72,7 @@ function np_process($purchase_data) {
         $_SESSION['edd_nextpay_record'] = $payment;
         $callback = add_query_arg('verify', 'nextpay', get_permalink($edd_options['success_page']));
         $currency = isset( $edd_options['currency'] ) ? $edd_options['currency'] : 'IRT';
-        if($currency == 'IRR'){
+        if($currency == 'IRR' || $currency == 'RIAL'){
             $amount = intval($payment_data['price']) / 10;
         }else{
             $amount = intval($payment_data['price']) ;
@@ -123,7 +123,7 @@ function np_verify() {
 
             include_once ("nextpay_payment.php");
             $currency = isset( $edd_options['currency'] ) ? $edd_options['currency'] : 'IRT';
-            if($currency == 'IRR'){
+            if($currency == 'IRR' || $currency == 'RIAL'){
                 $Amount = intval(edd_get_payment_amount($payment_id)) / 10;
             }else{
                 $Amount = intval(edd_get_payment_amount($payment_id)) ;
