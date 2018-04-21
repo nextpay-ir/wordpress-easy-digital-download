@@ -122,8 +122,7 @@ function np_verify() {
         if (strlen($trans_id) > 32 && strpos($trans_id, '-') !== false) {
 
             include_once ("nextpay_payment.php");
-            $currency = isset( $edd_options['currency'] ) ? $edd_options['currency'] : 'IRT';
-            if($currency == 'IRR' || $currency == 'RIAL'){
+            if(edd_get_currency() == 'IRR' || edd_get_currency() == 'RIAL'){
                 $Amount = intval(edd_get_payment_amount($payment_id)) / 10;
             }else{
                 $Amount = intval(edd_get_payment_amount($payment_id)) ;
